@@ -32,6 +32,14 @@ export default new Vuex.Store({
       })
     },
 
+    updateConsole(state, items) {
+      state.console = items;
+    },
+
+    updateWorkspace(state, items) {
+      state.workspace = items;
+    },
+
     loading(state, status) {
     	status = status || true;
     	state.loading = status;

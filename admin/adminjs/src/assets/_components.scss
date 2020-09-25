@@ -1,5 +1,5 @@
 // console
-.console-item {
+.post-item {
 	margin-bottom: 20px;
 	cursor: move;
 	.console-item-inner {
@@ -39,7 +39,7 @@
 	}
 }
 
-.workspace {
+.workspace, .workspace-items {
 	width: 100%;
 	height: 100%;
 	display: block;
