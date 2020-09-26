@@ -155,11 +155,12 @@ class Mic_Wp_Pageface {
 		$plugin_admin = new Mic_Wp_Pageface_Admin( $this->get_plugin_name(), $this->get_version() );
 		$plugin_settings = new Mic_Wp_Pageface_Admin_Settings( $this->get_plugin_name(), $this->get_version() );
 
+		$this->loader->add_action( 'init', $plugin_admin, 'register_post_type' );
+		$this->loader->add_action( 'init', $plugin_admin, 'plugin_filters' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 
 		$this->loader->add_action( 'admin_menu', $plugin_settings, 'setup_plugin_options_menu', 100 );
-		// $this->loader->add_action( 'admin_init', $plugin_settings, 'initialize_main_options' );
 
 	}
 

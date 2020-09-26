@@ -57,7 +57,7 @@ class Mic_Wp_Pageface_Admin_Settings {
 
 		add_menu_page( 
 			'Publisher Settings', 
-			'Publisher Settings', 
+			'Publisher', 
 			'manage_options', 
 			'publisher-settings', 
 			array( $this, 'render_settings_main_page' ), 
@@ -75,15 +75,15 @@ class Mic_Wp_Pageface_Admin_Settings {
 			array( $this, 'render_settings_page_content')				// The name of the function to call when rendering this menu's page
 		);
 
-		add_menu_page( 
-			'Publisher Page', 
-			'Publisher Page', 
-			'edit_others_posts', 
-			'publisher-page-display', 
-			array( $this, 'load_main_page' ), 
-			'dashicons-dashboard',
-			 0 
-		); 
+		// add_menu_page( 
+		// 	'Publisher Page', 
+		// 	'Publisher Page', 
+		// 	'edit_others_posts', 
+		// 	'publisher-page-display', 
+		// 	array( $this, 'load_main_page' ), 
+		// 	'dashicons-dashboard',
+		// 	 0 
+		// ); 
 
 	}
 
