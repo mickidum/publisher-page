@@ -14,6 +14,38 @@ export default new Vuex.Store({
   state: {
     console: [],
     workspace: [],
+    packages: [
+      {
+        name: "Hero",
+        kind: "package",
+        type: "special-one",
+        items: []
+      },
+      {
+        kind: "package",
+        name: "2 Cards",
+        type: "two-cards",
+        items: []
+      },
+      {
+        kind: "package",
+        name: "3 Cards",
+        type: "three-cards",
+        items: []
+      },
+      {
+        kind: "package",
+        name: "4 Cards",
+        type: "four-cards",
+        items: []
+      },
+      {
+        kind: "package",
+        name: "5 Cards",
+        type: "five-cards",
+        items: []
+      }
+    ],
     loading: false
   },
   mutations: {
@@ -33,11 +65,16 @@ export default new Vuex.Store({
     },
 
     updateConsole(state, items) {
-      state.console = items;
+      let filtered = items.filter(item => {
+        return item && !item.kind;
+      });
+      // console.log(filtered.length)
+      state.console = filtered;
     },
 
     updateWorkspace(state, items) {
       state.workspace = items;
+      // console.log(state.workspace)
     },
 
     loading(state, status) {
@@ -56,6 +93,7 @@ export default new Vuex.Store({
     async getPostsEmbed({ commit }) {
     	commit('loading', true);
       wp.posts().embed().then(data => {
+        // console.log(data)
         commit('fillPosts', data);
         commit('loading', false);
       });

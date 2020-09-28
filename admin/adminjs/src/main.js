@@ -4,10 +4,6 @@ import store from './store'
 
 import "./assets/app.scss"
 
-import vDragDrop from 'v-drag-drop';
-Vue.use(vDragDrop);
-
-
 Vue.config.productionTip = false
 
 new Vue({

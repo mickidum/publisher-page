@@ -44,4 +44,70 @@
 	height: 100%;
 	display: block;
 	position: relative;
+	.package {
+		margin-bottom: 15px;
+	}
+}
+
+.packages {
+	position: relative;
+	width: 100%;
+	border: solid 1px silver;
+	padding: 30px 10px 10px;
+	margin-bottom: 15px;
+	font-family: sans-serif;
+	.badge {
+		position: absolute;
+		top: 0;
+		left: 0;
+		padding: 4px 5px;
+	  background-color: #4CAF50;
+	  color: white;
+	  font-size: 10px;
+	  line-height: 1;
+	  text-transform: uppercase;
+	  letter-spacing: 1px;
+	}
+}
+
+.package {
+	font-size: 14px;
+	line-height: 1;
+  text-transform: uppercase;
+  padding: 10px 30px;
+  background: aliceblue;
+  border: dashed 1px #000;
+  cursor: move;
+}
+
+.packages-items {
+	display: flex;
+	.package {
+		margin-right: 10px;
+	}
+}
+
+.workspace {
+	.package {
+		min-height: 100px;
+		text-align: center;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin-bottom: 10px;
+	}
+
+	.post-item {
+		padding: 5px;
+		background: aliceblue;
+  	border: dashed 1px #000;
+  	margin-bottom: 10px;
+  	img {
+  		min-height: 200px;
+  	}
+  	.headline {
+  		font-size: 18px;
+  	}
+  	
+	}
 }
