@@ -1,5 +1,5 @@
 <template>
-  <div :class="['package', 'package-' + item.type]">
+  <div :class="['package', 'package-' + item.type, drag ? 'item-drag' : '']">
     <div class="package-item-inner">
       {{item.name}}
     </div>
@@ -9,7 +9,18 @@
 <script>
 export default {
   name: "package",
-  props: ['item'],
+  props: {
+    drag: {
+      required: false,
+      type: Boolean,
+      default: false
+    },
+    item: {
+      required: false,
+      type: Object,
+      default: null
+    }
+  },
   data() {
     return {};
   },

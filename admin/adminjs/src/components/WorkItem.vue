@@ -49,7 +49,10 @@ export default {
         return img;
       }
       return null;
-    }
+    },
+    uniqID() {
+      return '_' + Math.random().toString(36).substr(2, 9);
+    },
   }
 };
 </script>

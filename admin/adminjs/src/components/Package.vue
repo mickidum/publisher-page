@@ -108,7 +108,10 @@ export default {
     // this.list  when input != v-model
     realValue() {
       return this.value ? this.value : this.list;
-    }
+    },
+    uniqID() {
+      return '_' + Math.random().toString(36).substr(2, 9);
+    },
   }, 
   methods: {
     emitter(value) {

@@ -1,91 +1,136 @@
 <template>
   <div class="publisher-page-main">
 
-    <div class="packages">
+  	<div v-drag-and-drop:options="options">
+
+  	<div class="packages">
       <span class="badge">packages</span>
-      <draggable 
-        :list="packagesList"
-        class="packages-items-wrap" 
-        :group="{ name: 'item', pull: 'clone', put: false }" 
-        @start="drag = true"
-        @end="drag = false"
-        handle=".package"
-      >
-      <transition-group class="packages-items" type="transition" :name="!drag ? 'flip-list' : null">
-        <package-header v-for="(item, index) in packagesList" :key="index" :item="item" />
-      </transition-group>
-      </draggable>
+      <!-- <transition-group class="packages-items" type="transition" :name="!drag ? 'flip-list' : null"> -->
+      	<vue-draggable-group
+          v-model="packagesList"
+          :groups="groups"
+          data-id="3"
+          @change="onGroupsChange"
+        >
+        <div :data-id="3" class="packages-items">
+        	<package-header :data-id="index" :drag="true" v-for="(item, index) in packagesList" :key="index" :item="item" />
+        </div>
+      	</vue-draggable-group>
+      <!-- </transition-group> -->
     </div>
 
     <div class="publisher-page-wrapper">
+
       <div class="publisher-page-workspace">
-        <!-- <pre style="font-size: 12px;">{{workspaceList}}</pre> -->
         <span class="badge">workspace</span>
         <div class="workspace">
-          <draggable 
-            draggable=".work-item" 
-            class="workspace-items" 
-            v-model="workspaceList" 
-            group="item" 
-            v-bind="dragOptions"
-            @start="drag = true"
-            @end="drag = false"
-            
-          >
-          <transition-group class="workspace-items" type="transition" :name="!drag ? 'flip-list' : null">
-            <work-item v-model="workspaceList" v-for="(item, index) in workspaceList" :item="item" :key="index" />
-          </transition-group>
-          </draggable>
+          <vue-draggable-group
+	          v-model="workspaceList"
+	          :groups="groups"
+	          data-id="2"
+	          @change="onGroupsChange"
+	        >
+          <div id="work" :data-id="2" class="workspace-items">
+          	<!-- <transition-group  id="work" class="workspace-items" type="transition" :name="!drag ? 'flip-list' : null"> -->
+          		<post v-if="!item.kind" :drag="true" :data-id="item.id" v-for="(item, index) in workspaceList" :key="item.id" :post="item" />
+          		<package-header v-if="item.kind" :data-id="index" :drag="true" v-for="(item, index) in workspaceList" :key="index" :item="item" />
+          		
+          	<!-- </transition-group> -->
+          </div>
+          </vue-draggable-group>
         </div>
       </div>
+
       <div class="publisher-page-console">
-        <span class="badge">console</span>
-          <draggable 
-            draggable=".post-item" 
-            class="console-items" 
-            v-model="consoleList" 
-            group="item" 
-            @change="log"
-          >
-          <post v-if="!item.kind" v-for="(item, index) in consoleList" :key="item.id" :post="item" />
-          </draggable>
+      	<span class="badge">console</span>
+      	<vue-draggable-group
+          v-model="consoleList"
+          :groups="groups"
+          data-id="1"
+          @change="onGroupsChange"
+        >
+        <div :data-id="1">
+        	<post :drag="true" :data-id="item.id" v-for="item in consoleList" :key="item.id" :post="item" />
+        </div>
+      	</vue-draggable-group>
       </div>
+      
     </div>
+
+  </div>
+
   </div>
 </template>
 
 <script>
-import draggable from "vuedraggable";
 import Post from "@/components/Post.vue";
 // import WorkspaceItem from "@/components/WorkspaceItem.vue";
 import PackageHeader from "@/components/PackageHeader.vue";
 import WorkItem from "@/components/WorkItem.vue";
 // import Workspace from "@/components/Workspace.vue";
+import { config } from "@/config"
+import wpapi from 'wpapi'
+
+const apiUrl =
+  process.env.NODE_ENV === "production" ? config.prodUrl : config.devUrl;
+
+const wp = new wpapi({ endpoint: apiUrl });
 
 export default {
   name: 'App',
   components: {
     WorkItem,
     Post,
-    draggable,
+    // draggable,
     // WorkspaceItem,
     PackageHeader
   },
-  data() {
+    data() {
     return {
-      drag: false
-    }
+    	drag: false,
+    	groups: [
+    		{
+          id: 1,
+          name: "Console",
+          items: [
+            
+          ],
+        },
+        {
+          id: 2,
+          name: 'Workspace',
+          items: [
+            
+          ],
+        },
+        {
+          id: 3,
+          name: 'Packages',
+          items: [
+            
+          ],
+        },
+    	],
+      options: {
+        dropzoneSelector: '#work',
+        draggableSelector: '.item-drag',
+        // excludeOlderBrowsers: true,
+        // multipleDropzonesItemsDraggingEnabled: true,
+        onDrop(event) {
+          console.log(
+
+            {event});
+        }
+        // onDragstart(event) {
+        //   event.stop();
+        // },
+        // onDragend(event) {
+        //   event.stop();
+        // }
+      }
+    };
   },
   computed: {
-
-    dragOptions() {
-      return {
-        animation: 200,
-        group: "item",
-        disabled: false,
-        ghostClass: "ghost"
-      };
-    },
 
     packagesList: {
       get() {
@@ -120,22 +165,25 @@ export default {
   },
   mounted() {
     this.$store.dispatch("getPostsEmbed");
+
+    wp.posts().embed().then(data => {
+      this.groups[0].items = data;
+    });
   },
   methods: {
-    log: function(evt) {
-      // console.log('CONSOLE ITEMS: ', this.consoleList);
-      // console.log('WORKSPACE ITEMS: ', this.workspaceList);
-      window.console.log(evt);
-    },
     uniqID() {
       return '_' + Math.random().toString(36).substr(2, 9);
     },
     onAdd(e) {
       console.log(e)
     },
-    // checkMove: function(evt){
-    //   return evt.draggedContext.element.kind !== 'package';
-    // }
+    removed(item) {
+    	console.log(item);
+    	this.$store.commit('updateConsole', item)
+    },
+    onGroupsChange(e) {
+    	console.log({e});
+    }
   }
 }
 </script>

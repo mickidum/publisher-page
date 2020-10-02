@@ -1,5 +1,5 @@
 <template>
-  <div :class="['post-item', 'post-item-' + post.id]">
+  <div :class="['post-item', 'post-item-' + post.id, drag ? 'item-drag' : '']">
     <div class="console-item-inner">
       <div v-if="post.featured_media && getMedia(post)" class="media">
         <img :src="getMedia(post)" :alt="post.title.rendered">
@@ -15,7 +15,18 @@
 <script>
 export default {
   name: "Post",
-  props: ['post'],
+  props: {
+    drag: {
+      required: false,
+      type: Boolean,
+      default: false
+    },
+    post: {
+      required: false,
+      type: Object,
+      default: null
+    }
+  },
   data() {
     return {};
   },
