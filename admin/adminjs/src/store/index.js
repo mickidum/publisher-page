@@ -16,30 +16,35 @@ export default new Vuex.Store({
     workspace: [],
     packages: [
       {
+        id: null,
         name: "Hero",
         kind: "package",
         type: "special-one",
         items: []
       },
       {
+        id: null,
         kind: "package",
         name: "2 Cards",
         type: "two-cards",
         items: []
       },
       {
+        id: null,
         kind: "package",
         name: "3 Cards",
         type: "three-cards",
         items: []
       },
       {
+        id: null,
         kind: "package",
         name: "4 Cards",
         type: "four-cards",
         items: []
       },
       {
+        id: null,
         kind: "package",
         name: "5 Cards",
         type: "five-cards",
@@ -75,6 +80,21 @@ export default new Vuex.Store({
     updateWorkspace(state, items) {
       state.workspace = items;
       // console.log(state.workspace)
+    },
+
+    updateWorkspaceItem(state, item) {
+      state.workspace = [
+        ...state.workspace,
+        item
+      ]
+      // console.log(state.workspace)
+    },
+
+    updateConsoleItem(state, item) {
+      let filtered = state.console.filter(i => {
+        return item && i.id !== item.id;
+      });
+      state.console = filtered;
     },
 
     loading(state, status) {

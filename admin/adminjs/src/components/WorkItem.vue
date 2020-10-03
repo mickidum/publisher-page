@@ -39,7 +39,9 @@ export default {
   },
 
   computed: {
-    
+    uniqID() {
+      return '_' + Math.random().toString(36).substr(2, 9);
+    },
   },
 
   methods: {
@@ -50,9 +52,7 @@ export default {
       }
       return null;
     },
-    uniqID() {
-      return '_' + Math.random().toString(36).substr(2, 9);
-    },
+    
   }
 };
 </script>

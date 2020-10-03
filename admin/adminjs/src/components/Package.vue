@@ -54,16 +54,17 @@ export default {
 <template>
   <draggable
     tag="div"
-    :class="['package', 'package-' + item.type, item.items.length ? 'filled' : '']"
-    :list="item.items"
+    :class="['package', 'package-id' + uniqID, 'package-' + item.type, item.items.length ? 'filled' : '']"
+    v-model="item.items"
     :value="value"
     @input="emitter"
     group="item"
+    handle=".post-item"
   >
     <div class="package-item-inner">
       {{item.name}}
       <template v-if="!el.kind" v-for="el in item.items">
-        <workspace-item :key="el.id" :post="el" />
+        <workspace-item :class="el.id" :key="el.id" :post="el" />
       </template>
     </div>
   </draggable>
