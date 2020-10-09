@@ -11,6 +11,7 @@
         @start="drag = true"
         @end="drag = false"
         handle=".package"
+        @change="log"
       >
       <transition-group class="packages-items" type="transition" :name="!drag ? 'flip-list' : null">
         <package-header v-for="(item, index) in packagesList" :key="item.type" :item="item" />
@@ -31,7 +32,7 @@
             v-bind="dragOptions"
             @start="drag = true"
             @end="drag = false"
-            
+            @change="log"
           >
           <transition-group class="workspace-items" type="transition" :name="!drag ? 'flip-list' : null">
             <work-item v-model="workspaceList" v-for="(item, index) in workspaceList" :item="item" :key="item.id" />
@@ -127,18 +128,19 @@ export default {
   },
   mounted() {
     this.$store.dispatch("getPostsEmbed");
+    this.$store.dispatch("getWorkspace");
   },
   methods: {
     log: function(evt) {
       // console.log('CONSOLE ITEMS: ', this.consoleList);
       // console.log('WORKSPACE ITEMS: ', this.workspaceList);
-      window.console.log(evt);
+      // window.console.log(evt);
     },
     uniqID() {
       return '_' + Math.random().toString(36).substr(2, 9);
     },
     onAdd(e) {
-      console.log(e)
+      // console.log(e)
     },
     // checkMove: function(evt){
     //   return evt.draggedContext.element.kind !== 'package';

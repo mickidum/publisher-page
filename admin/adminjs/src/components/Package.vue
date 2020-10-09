@@ -59,13 +59,19 @@ export default {
     :value="value"
     @input="emitter"
     group="item"
-    handle=".post-item"
   >
     <div class="package-item-inner">
       {{item.name}}
+      <draggable
+        tag="div"
+        group="item"
+        handle=".post-item"
+        v-model="item.items"
+      >
       <template v-if="!el.kind" v-for="el in item.items">
         <workspace-item :class="el.id" :key="el.id" :post="el" />
       </template>
+    </draggable>
     </div>
   </draggable>
 </template>

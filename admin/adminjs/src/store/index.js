@@ -6,11 +6,14 @@ import wpapi from 'wpapi'
 const apiUrl =
   process.env.NODE_ENV === "production" ? config.prodUrl : config.devUrl;
 
+const currentID = config.currentID;
+const wpStore = window.publisherPageStore || {};
 const wp = new wpapi({ endpoint: apiUrl });
+wp.workspace = wp.registerRoute('wp/v2', '/mic_publisher_page/(?P<id>)');
 
 Vue.use(Vuex)
 
-export default new Vuex.Store({
+const store = new Vuex.Store({
   state: {
     console: [],
     workspace: [],
@@ -56,6 +59,10 @@ export default new Vuex.Store({
   mutations: {
     fillPosts(state, items) {
       state.console = items;
+    },
+
+    fillWorkspace(state, items) {
+      state.workspace = items;
     },
 
     updateList(state, item) {
@@ -121,13 +128,24 @@ export default new Vuex.Store({
 
     async getWorkspace({ commit }) {
     	commit('loading', true);
-      // wp.posts().embed().then(data => {
-      //   commit('fillPosts', data);
-      //   commit('loading', false);
-      // });
+      wp.workspace().id(currentID).then(data => {
+        // let items = JSON.parse(decodeURIComponent(data.excerpt.rendered))
+        // console.log(items);
+        console.log(data.mic_workspace_items);
+        // commit('fillWorkspace', items);
+      })
       commit('loading', false);
     },
   },
   modules: {
   }
+});
+
+const updateWPStore = store.subscribe((mutation, state) => {
+  if (mutation.type === 'updateWorkspace' || mutation.type === 'updateConsole') {
+    wpStore.workspace = JSON.parse(JSON.stringify(state.workspace));
+    // console.log(wpStore)
+  }
 })
+
+export default store;

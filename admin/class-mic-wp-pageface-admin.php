@@ -108,13 +108,49 @@ class Mic_Wp_Pageface_Admin {
 			'has_archive'        => true,
 			'hierarchical'       => false,
 			'menu_position'      => null,
-			'supports'           => array('title','excerpt')
+			// 'supports'           => array('title','excerpt'),
+			'supports'           => array('title'),
 		) );
 	}
 
+	public function register_meta_field() {
+		$args = array(
+			'type'              => 'string',
+			'single'            => true,
+			'show_in_rest'      => false,
+		);
+		register_post_meta( 'mic_publisher_page', 'mic_workspace_items', $args );
+	}
+
+	public function add_custom_fields() {
+		$meta = [
+	    'key' => 'mic_workspace_items',
+	    'type' => 'string'
+		];
+		register_rest_field('mic_publisher_page', $meta['key'], [
+	    'get_callback' => function ($params) use ($meta) {
+	        return get_post_meta($params['id'], $meta['key'], true);
+	    },
+	    'update_callback' => function ($value, $object, $fieldName){
+	        return update_post_meta($object->ID, $fieldName, $value);
+	    }
+		]);
+	}
+
+	public function get_workspace( $value, $object, $fieldName ) {
+
+		return get_post_meta( $object['id'], 'mic_workspace_items', true );
+	}
+
+	public function update_workspace( $value, $object, $fieldName ) {
+		var_dump($value);
+		die();
+		return update_post_meta($object['id'], 'mic_workspace_items', $value);
+	}
+
 	public function plugin_filters() {
-    remove_filter('the_excerpt','wpautop');
-		add_filter('the_excerpt',array($this, 'custom_formatting'));
+  //   remove_filter('the_excerpt','wpautop');
+		// add_filter('the_excerpt',array($this, 'custom_formatting'));
 
 		add_action( 'edit_form_after_title', array($this, 'add_app_block_to_page'));
 
@@ -239,8 +275,15 @@ class Mic_Wp_Pageface_Admin {
 
 		wp_localize_script( $this->plugin_name . 'appjs', 'publisherPageStore', 
 			array( 
-				'restUrl' =>  rtrim(get_rest_url(),"/")
+				'restUrl' =>  rtrim(get_rest_url(),"/"),
+				'currentID' => get_the_ID(),
+				'workspace' => array()
 			) );
+
+		wp_localize_script( $this->plugin_name . 'appjs', 'REST_API_data', array(
+			'root'  => esc_url_raw( rest_url() ),
+			'nonce' => wp_create_nonce( 'wp_rest' )
+		) );
 
 	}
 

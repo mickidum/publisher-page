@@ -54,21 +54,22 @@
 </style>
 
 <script>
-	window.onload = function() {
-		var submit = document.querySelector('#publish');
-		var excerpt = document.querySelector('#excerpt');
-		// excerpt.setAttribute("readonly", true);
-		// excerpt.value = decodeURIComponent(excerpt.value);
-		submit.addEventListener('click', function(e){
-			// e.preventDefault();
-			// var a = confirm('publish?');
-			excerpt.value = encodeURIComponent(JSON.stringify(window.publisherPageStore));
+	// window.onload = function() {
+	// 	var submit = document.querySelector('#publish');
+	// 	var excerpt = document.querySelector('#excerpt');
+	// 	// excerpt.setAttribute("readonly", true);
+	// 	// excerpt.value = decodeURIComponent(excerpt.value);
+	// 	submit.addEventListener('click', function(e){
+	// 		// e.preventDefault();
+	// 		// var a = confirm('publish?');
+	// 		excerpt.value = encodeURIComponent(JSON.stringify(window.publisherPageStore.workspace));
+	// 		// excerpt.value = '';
 
-			console.log(excerpt.value)
+	// 		// console.log(excerpt.value)
 
-		});
-		// input.value = JSON.stringify(window.publisherPageStore);
-	}
+	// 	});
+	// 	// input.value = JSON.stringify(window.publisherPageStore);
+	// }
 	
 	
 	// a.addEventListener('submit', function(e){
@@ -76,5 +77,35 @@
 		
 	// 	console.log(a);
 	// })
+
+	jQuery(document).ready(function($) {
+		var submit = $('#publish');
+		var excerpt = $('#excerpt');
+
+		var post_id = window.publisherPageStore.currentID;
+		var restUrl = window.publisherPageStore.restUrl + '/wp/v2/mic_publisher_page/' + post_id;
+
+		$(document).on('click', '#publish', function(event) {
+			event.preventDefault();
+			// console.log(window.publisherPageStore.workspace)
+
+			$.ajax({
+		    type: "POST",
+		    url: restUrl,
+		    beforeSend: function ( xhr ) {
+					xhr.setRequestHeader( 'X-WP-Nonce', REST_API_data.nonce );
+				},
+		    data: JSON.stringify({ mic_workspace_items: window.publisherPageStore.workspace }),
+		    contentType: "application/json; charset=utf-8",
+		    dataType: "json",
+		    success: function(data){
+		    	console.log(data);
+		    },
+		    error: function(errMsg) {
+		      console.log(errMsg);
+		    }
+			});
+		});
+	});
 </script>
 

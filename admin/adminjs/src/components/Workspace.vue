@@ -39,12 +39,12 @@ export default {
     },
 
     onDragDrop(e) {
-      console.log('DROP: ', e.id)
+      // console.log('DROP: ', e.id)
       // this.$store.commit('updateList', e);
     },
 
     onDragOver(e) {
-      console.log('OVER: ', e.id)
+      // console.log('OVER: ', e.id)
       // this.$store.commit('updateList', e);
     }
   }
